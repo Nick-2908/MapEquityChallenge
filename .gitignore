@@ -1,0 +1,15 @@
+.venv/
+analysis_outputs/duckdb_tmp/
+__pycache__/
+*.pyc
+
+# Raw multi-GB Overture/strata data (fetch separately from source.coop) --
+# keep only the small reference files needed to reproduce / submit.
+data/*
+!data/README.md
+!data/boundaries
+!data/reference
+data/reference/*/*.parquet
+data/reference/*/*.csv
+!data/reference/*/*-sample-submission.csv
+!data/reference/*/*-census-acs-housing.csv

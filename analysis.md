@@ -294,12 +294,22 @@ Every tract has some POIs and drivable roads; the only exceptions are the two al
 
 ## 10. Reproducibility
 
-| Script | Produces |
-|---|---|
-| `analysis_scripts/01_inventory.py` | `analysis_outputs/inventory.json`: every file's size, rows, schema and geometry types |
-| `analysis_scripts/02_tracts_and_strata.py` | `02_tracts_and_strata.txt`, `scored_tracts_strata.parquet` |
-| `analysis_scripts/03_overture_layers.py` | `03_overture_layers.txt`: per-layer class, source and category profiles |
-| `analysis_scripts/04_tract_aggregates.py` | `tract_overture_aggregates.parquet` (+ `agg_<region>.parquet`): DuckDB spatial joins, about 20 min total, of which Texas is about 9 |
-| `analysis_scripts/05_tract_analysis.py` | `05_tract_analysis.txt`, `tract_analysis_table.parquet` (9,794 rows; Overture aggregates + ACS + all strata + derived ratios) |
+The analysis scripts were replaced by Jupyter notebooks in `notebooks/` (run top to bottom from that folder; they read the data straight out of `data/*.zip` where possible).
 
-Run with `.venv/Scripts/python -I analysis_scripts/<script>.py` from `D:\ADA_project`.
+| Notebook | Produces / covers |
+|---|---|
+| `01_inventory` | `inventory_parquet_footers.csv`: every parquet's size, rows and columns, read from the zip footers |
+| `02_tracts_and_strata` | `02_tracts_and_strata.txt`, `scored_tracts_strata.parquet` |
+| `03_overture_layers` | `03_overture_layers.txt` (needs `duckdb`; extracts the Overture layers from the zip first) |
+| `04_tract_aggregates` | `tract_overture_aggregates.parquet` and `agg_<region>.parquet` (DuckDB spatial joins, about 20 min; needs `duckdb`) |
+| `05_tract_analysis` | `05_tract_analysis.txt`, `tract_analysis_table.parquet` |
+| `06_glm_framework` | correlation / ANOVA / regression / ANCOVA as one GLM; ML case study; builds `model_frame.parquet` |
+| `07_data_preparation` | statistical tests, imputation, transformations, feature selection, before/after case study |
+| `08_generalized_linear_models` | logistic vs Poisson vs negative binomial |
+| `09_time_series` | monthly series of Overture building update times: smoothing, regression, ADF/KPSS, ARIMA/SARIMA/SARIMAX (`building_update_monthly.parquet`) |
+| `10_monte_carlo_mcmc` | Monte Carlo convergence, permutation/bootstrap, target-construction simulation, Metropolis-Hastings |
+| `11_causal_basics` | Simpson's paradox, potential outcomes, DAGs, adjustment, front-door, assumptions |
+| `12_causal_classical` | PSM, stratification, IPW, doubly robust, RDD, DID (simulated) |
+| `13_causal_ml` | meta-learners, DML, DML-IV, uplift, causal trees/forests, PC discovery, predictive vs causal case study |
+
+Notebooks 06-13 use *proxy* outcomes (POIs per building, presence of a fire POI, a USFS-based building gap), not the hidden competition target, and need only the committed parquet files in `analysis_outputs/`. Notebooks 02 and 05 were re-run after conversion; 03 and 04 were converted but not re-run (their committed outputs come from the original scripts).

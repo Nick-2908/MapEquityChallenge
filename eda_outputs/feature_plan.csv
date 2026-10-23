@@ -1,0 +1,35 @@
+feature,group,transform,note,missing %,skew
+bldg_per_km2,buildings,yeo-johnson,density of buildings,0.02,0.77
+bldg_per_hu,buildings,"cap at 99th pct, yeo-johnson",tiny denominators give extreme values; missing when no housing units,0.84,63.39
+share_msft,buildings,none (bounded),how much of the reference is already in Overture,0.02,0.52
+share_osm,buildings,none (bounded),mirror of share_msft (see redundancy check below),0.02,-0.33
+tiny_share,buildings,yeo-johnson,footprints under 30 m2,0.02,2.42
+height_share,buildings,none (bounded),attribute completeness,0.02,-0.99
+bldg_area_median_m2,buildings,yeo-johnson,typical footprint,0.02,8.83
+road_km_per_km2,roads,none,already symmetric,0.02,0.1
+hwy_share_of_road_km,roads,none (bounded),highway classes the road component uses,0.02,1.29
+road_km_hwy,roads,log1p,"0 = no highway, a defining case for the road component",0.0,4.93
+has_motorway,roads,binary,presence of each highway class,0.0,0.43
+has_trunk,roads,binary,presence of each highway class,0.0,1.58
+rail_km,roads,log1p,mostly zero,0.0,7.93
+no_transit,roads,binary,half of tracts,0.0,-0.73
+poi_per_km2,POIs,log1p,POI density,0.02,7.43
+poi_per_1k_pop,POIs,"cap, log1p",tiny populations give extreme values,0.28,51.14
+poi_per_100_bldg,POIs,log,places per building,0.02,15.15
+poi_n_fire,POIs,count / binary,"fire stations, the facility type that carries the POI component",0.0,2.15
+poi_n_ems,POIs,binary,very rare,0.0,4.74
+poi_n_school,POIs,count,schools,0.0,1.51
+conf05_share,POIs,none (bounded),POI confidence,0.02,-4.09
+pop_density,context,yeo-johnson,density of people,0.02,3.46
+pct_urban,context,none (bounded),almost binary,0.28,-1.54
+ruca_primary,context,ordinal,rural-urban commuting code,0.0,9.38
+land_km2,context,log,tract size,0.0,8.54
+water_share,context,none (bounded),46% zero,0.0,7.13
+svi_overall,vulnerability,none,missing for 1-2%: impute plus flag,0.9,-0.3
+cvi_overall,vulnerability,none,climate vulnerability,0.02,0.0
+tribal_pct,vulnerability,none (bounded),share inside tribal land,0.0,2.97
+usfs_WHP_mean,hazard,yeo-johnson,behaves like a ruralness measure,0.0,12.15
+usdm_summer_dsci,hazard,none,regional,0.02,0.51
+gehe_wbgt28_days_mean,hazard,none,"regional, near-zero in Eastern WA",0.0,0.21
+pmdi_mean,hazard,none,regional,0.0,-0.33
+housing_units,context,log1p,"ACS count, a permitted reference",0.0,1.94

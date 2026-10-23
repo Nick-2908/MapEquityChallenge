@@ -1,7 +1,7 @@
 # Bias Bounty Mapping Equity Challenge — Data Analysis
 
 *Analysis date: 2026-10-20. Scope: understanding the competition and the data only. No modelling approach chosen yet.*
-*All numbers are reproducible from `analysis_scripts/01–05_*.py`. Raw outputs are in `analysis_outputs/`.*
+*All numbers are reproducible from the notebooks in `analysis_scripts/`. Raw outputs are in `analysis_outputs/`.*
 
 ---
 
@@ -294,22 +294,18 @@ Every tract has some POIs and drivable roads; the only exceptions are the two al
 
 ## 10. Reproducibility
 
-The analysis scripts were replaced by Jupyter notebooks in `notebooks/` (run top to bottom from that folder; they read the data straight out of `data/*.zip` where possible).
+The EDA is a sequence of notebooks in `eda/` (run in order from that folder). They read the committed tract tables in `analysis_outputs/` and the reference files in `data/`; no raw Overture layers or DuckDB are needed.
 
-| Notebook | Produces / covers |
+| Notebook | Question |
 |---|---|
-| `01_inventory` | `inventory_parquet_footers.csv`: every parquet's size, rows and columns, read from the zip footers |
-| `02_tracts_and_strata` | `02_tracts_and_strata.txt`, `scored_tracts_strata.parquet` |
-| `03_overture_layers` | `03_overture_layers.txt` (needs `duckdb`; extracts the Overture layers from the zip first) |
-| `04_tract_aggregates` | `tract_overture_aggregates.parquet` and `agg_<region>.parquet` (DuckDB spatial joins, about 20 min; needs `duckdb`) |
-| `05_tract_analysis` | `05_tract_analysis.txt`, `tract_analysis_table.parquet` |
-| `06_glm_framework` | correlation / ANOVA / regression / ANCOVA as one GLM; ML case study; builds `model_frame.parquet` |
-| `07_data_preparation` | statistical tests, imputation, transformations, feature selection, before/after case study |
-| `08_generalized_linear_models` | logistic vs Poisson vs negative binomial |
-| `09_time_series` | monthly series of Overture building update times: smoothing, regression, ADF/KPSS, ARIMA/SARIMA/SARIMAX (`building_update_monthly.parquet`) |
-| `10_monte_carlo_mcmc` | Monte Carlo convergence, permutation/bootstrap, target-construction simulation, Metropolis-Hastings |
-| `11_causal_basics` | Simpson's paradox, potential outcomes, DAGs, adjustment, front-door, assumptions |
-| `12_causal_classical` | PSM, stratification, IPW, doubly robust, RDD, DID (simulated) |
-| `13_causal_ml` | meta-learners, DML, DML-IV, uplift, causal trees/forests, PC discovery, predictive vs causal case study |
+| `01_data_inventory` | What data is on disk, and do the tract lists agree across sources? |
+| `02_base_table_and_quality` | Join the sources, fill structural nulls, check consistency; saves `eda_outputs/base_table.parquet` |
+| `03_distributions` | How are the key variables distributed, and which transforms symmetrise them? |
+| `04_buildings` | Counts, density, sources, footprint quality, agreement with independent counts |
+| `05_roads_rail_transit` | Road classes and density, the highway classes the target uses, rail and transit |
+| `06_pois_and_facilities` | POI counts and rates, quality, fire/EMS/school/hospital facilities |
+| `07_strata_vulnerability_hazards` | Urbanity, SVI/CVI, tribal tracts, hazards |
+| `08_coverage_by_group` | Coverage proxies across rural, vulnerable and tribal tracts; confounding by rurality |
+| `09_feature_plan` | Feature list and transforms, redundancy, region shift, validation design; saves `feature_plan.csv` and `model_ready.parquet` |
 
-Notebooks 06-13 use *proxy* outcomes (POIs per building, presence of a fire POI, a USFS-based building gap), not the hidden competition target, and need only the committed parquet files in `analysis_outputs/`. Notebooks 02 and 05 were re-run after conversion; 03 and 04 were converted but not re-run (their committed outputs come from the original scripts).
+The two tract tables in `analysis_outputs/` (`tract_overture_aggregates`, `scored_tracts_strata`) were produced by earlier DuckDB notebooks that read the raw zips; those are in git history (commit `7120d10`). The hidden target cannot be computed, so everything uses observable proxies.

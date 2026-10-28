@@ -1,15 +1,47 @@
-.venv/
-analysis_outputs/duckdb_tmp/
+# ==============================================================================
+# Python, Virtual Environments & Caches
+# ==============================================================================
 __pycache__/
-*.pyc
+**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+**/.pytest_cache/
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
 
-# Raw multi-GB Overture/strata data (fetch separately from source.coop) --
-# keep only the small reference files needed to reproduce / submit.
-data/*
-!data/README.md
-!data/boundaries
-!data/reference
-data/reference/*/*.parquet
-data/reference/*/*.csv
+.venv/
+env/
+venv/
+
+# ==============================================================================
+# Operating System & Temporary Files
+# ==============================================================================
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# ==============================================================================
+# Data Files (Multi-GB Raw Overture & Strata Data)
+# ==============================================================================
+# Ignore all large parquets and archives anywhere in data/
+data/**/*.parquet
+data/strata/
+data/*.pdf
+data/*.zip
+
+# Keep only lightweight boundary, reference CSV, and template files
+!data/boundaries/
 !data/reference/*/*-sample-submission.csv
 !data/reference/*/*-census-acs-housing.csv
+
+# ==============================================================================
+# Build & EDA Outputs
+# ==============================================================================
+eda_outputs/_cache/
+eda_outputs/*.log
+eda_outputs/build_log.txt
+
+# (Optional: uncomment if you don't want generated parquet tables in git)
+# eda_outputs/*.parquet
